@@ -1,0 +1,25 @@
+ {% extends "AppHospital/padre.html" %}
+
+ {% load static %}
+
+ {% block titulo_head %}
+    <title>Inicio</title>
+ {% endblock %}
+
+ {% block titulo %}
+    <h1>Bienvenidos al Hospital</h1>
+ {% endblock %}
+ {% block main %}
+    
+    <form action=" {% url 'inicio' %} " method="POST"> {% csrf_token %}
+
+        <table>
+
+            {{formulario.as_table}}
+
+        </table>
+
+
+    </form>
+
+ {% endblock %}
