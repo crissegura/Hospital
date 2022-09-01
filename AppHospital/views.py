@@ -34,12 +34,11 @@ def empleados (request):
 def servicios (request):
     if request.method == "POST":
         nuevoServicio=Nuevo_servicio(request.POST)
-        print(nuevoServicio)
         if nuevoServicio.is_valid():
             informacion=nuevoServicio.cleaned_data
-            servicio=informacion.get("servicio")
-            precio=informacion.get("precio")
-            servicioAgregado=Servicios(servicio=servicio,precio=precio)
+            getServicio=informacion.get("servicio")
+            getPrecio=informacion.get("precio")
+            servicioAgregado=Servicios(servicio=getServicio,precio=getPrecio)
             servicioAgregado.save()
             return render(request, "AppHospital/inicio.html" )
         else:
@@ -70,7 +69,7 @@ def pacientes(request):
             return render(request, "AppHospital/inicio.html")
     else:
         nuevoPaciente=Nuevo_paciente()
-        return render (request, "AppHospital/pacForm.html", {"formulario":nuevoPaciente})
+        return render (request, "AppHospital/pacientes.html", {"formulario":nuevoPaciente})
     
     
     

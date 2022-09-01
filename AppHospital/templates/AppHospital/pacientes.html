@@ -4,15 +4,15 @@
  {% load static %}
 
  {% block titulo_head %}
-    <title>Empleados</title>
+    <title>Pacientes</title>
  {% endblock %}
 
 
 
 {% block main %}
       <div style="width: 70%; border:solid 1px black; border-bottom-left-radius: 10px ;border-bottom-right-radius: 10px ; text-align: center; margin-left: 15%; margin-top: 20px ;margin-bottom: 20px; ">
-      <form style="background-color: rgba(128, 128, 128, 0.33); display:flex; flex-direction:column; align-items: center ;"  action="{% url 'empleados' %}" method="POST"> {% csrf_token %}
-         <h3 style=" width: 100%; padding: 10px; background-color:  #343a40; color: white;" >Registrá un empleado</h3>
+      <form style="background-color: rgba(128, 128, 128, 0.33); display:flex; flex-direction:column; align-items: center ;"  action="{% url 'pacientes' %}" method="POST"> {% csrf_token %}
+         <h3 style=" width: 100%; padding: 10px; background-color:  #343a40; color: white;" >Registrá un nuevo paciente</h3>
          <table>
 
             {{formulario.as_table}}
