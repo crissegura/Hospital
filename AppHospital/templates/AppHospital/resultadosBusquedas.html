@@ -1,0 +1,10 @@
+
+<h2>Paciente: {{nombre}} </h2>
+
+{% if paciente %}
+    <ul>
+        {% for pac in paciente %}
+        <li> {{pac.nombre}} </li>
+        {% endfor %}
+    </ul>
+{% endif %}
