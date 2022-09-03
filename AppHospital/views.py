@@ -73,7 +73,7 @@ def pacientes(request):
     
     
 def buscarPaciente(request):
-    return render(request, "AppHospital/buscarPaciente.html")
+    return render(request, "AppHospital/pacientes.html")
 
 def buscar(request):
     nombre=request.GET['nombre']
@@ -83,7 +83,31 @@ def buscar(request):
     else:
         return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'Paciente no registrado'} )
     
-     
+def buscarEmpleado(request):
+    return render (request, "AppHospital/empleados.html")
+
+def buscarEmp(request):
+    nombre=request.GET['nombre']
+    empleados=Empleados.objects.filter(nombre=nombre)
+    if len(empleados)!=0:
+        return render(request, "AppHospital/resultadosBusquedas.html", {"empleados":empleados, "nombre":nombre} )
+    else:
+        return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'Esta persona no trabaja aquí.'} )
+
+def buscarServicio(request):
+    return render (request, "AppHospital/servicios.html")
+
+def buscarServ(request):
+    servicio=request.GET['nombre']
+    miServicio=Servicios.objects.filter(servicio=servicio)
+    if len(miServicio)!=0:
+        return render(request, "AppHospital/resultadosBusquedas.html", {"miServicio":miServicio, "servicio":servicio} )
+    else:
+        return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'No realizamos este servicio en el Hospital.'} )
+
+
+    
+
 
 
 

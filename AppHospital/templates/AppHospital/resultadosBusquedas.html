@@ -1,7 +1,7 @@
-
 <h2> Resultado búsqueda: </h2>
 
     <h3> {{mensaje}} </h3>
+
     {% for pac in paciente %}
         <h3>Paciente: {{pac.nombre}} </h3> 
         <h3>Situación: {{pac.situacion}} </h3>
@@ -10,3 +10,16 @@
         <h3>Fecha de regreso: {{pac.fecha_regreso}} </h3>
     {% endfor %}
    
+    {% for emp in empleados %}
+        <h3> Empleado: {{emp.nombre}} </h3>
+        <h3> Email: {{emp.email}} </h3>
+        <h3> Profesión: {{emp.profesion}} </h3>
+        <h3> especialización: {{emp.especializacion}} </h3>
+        <h3> Sueldo: ${{emp.sueldo}} </h3>
+    {% endfor %}
+
+    {% for ser in miServicio %}
+        <h3> Servicio: {{ser.servicio}} </h3>
+        <h3> Precio: ${{ser.precio}} </h3>
+    {% endfor %}
+    
