@@ -76,14 +76,10 @@ def buscarPaciente(request):
     return render(request, "AppHospital/buscarPaciente.html")
 
 def buscar(request):
-    if request.GET['nombre']:
-        nombre=request.GET['nombre']
-        paciente=Pacientes.objects.filter(nombre__icontains=nombre)
-        return render(request, "AppHospital/resultadosBusquedas.html", {"paciente":paciente, "nombre":nombre} )
-    else:
-        respuesta= 'No ingresaste ningun dato'
-
-    return HttpResponse(respuesta) 
+    nombre=request.GET['nombre']
+    paciente=Pacientes.objects.filter(nombre=nombre)
+    return render(request, "AppHospital/resultadosBusquedas.html", {"paciente":paciente, "nombre":nombre} )
+     
 
 
 

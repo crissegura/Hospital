@@ -1,10 +1,11 @@
 
-<h2>Paciente: {{nombre}} </h2>
+<h2> Resultado búsqueda: </h2>
 
-{% if paciente %}
-    <ul>
-        {% for pac in paciente %}
-        <li> {{pac.nombre}} </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    {% for pac in paciente %}
+        <h3>Paciente: {{pac.nombre}} </h3> 
+        <h3>Situación: {{pac.situacion}} </h3>
+        <h3>Email: {{pac.email}} </h3>
+        <h3>Última visita: {{pac.ultima_visita}} </h3>
+        <h3>Fecha de regreso: {{pac.fecha_regreso}} </h3>
+    {% endfor %}
+   
