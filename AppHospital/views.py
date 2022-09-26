@@ -3,10 +3,81 @@ from django.shortcuts import render
 from .models import *
 from django.template import Context, Template,loader
 from AppHospital.forms import *
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, logout, authenticate
 
+def login_request(request):
+    if request.method=='POST':
+        form=AuthenticationForm(request, data = request.POST)
+        if form.is_valid():
+            user=form.cleaned_data.get('username')
+            password=form.cleaned_data.get('password')
+            usuario = authenticate(username=user,password=password)
+            if usuario is not None:
+                login(request, usuario)
+                return render (request, 'AppHospital/inicio.html', {'mensaje':f'Bienvenido {user}. '} )
+            else:
+                return render(request, 'AppHospital/login.html', {'mensaje':f'No se pudo iniciar sesión. Datos incorrectos.','form':form} )
+        else:
+            return  render(request, 'AppHospital/login.html', {'mensaje':f'Error, formulario erróneo.', 'form':form} )
+    form=AuthenticationForm()
+    return  render(request, 'AppHospital/login.html', {'form':form} )
+
+def register(request):
+    if request.method=='POST':
+        form=UserRegisterForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data.get('username')
+            form.save()
+            return render (request, 'AppHospital/inicio.html', {'mensaje':'Usuario creado exitosamente!'} )
+    else:
+        form = UserRegisterForm()
+    return  render(request, 'AppHospital/registro.html', {'form':form} )
 
 def inicio (request):
     return render (request,"AppHospital/inicio.html")
+
+def leerEmpleados (request):
+    empleados = Empleados.objects.all()
+    context = {'empleados': empleados}
+    return render (request, 'AppHospital/leeremp.html', context)
+
+def eliminarEmpleado (request, empleado_nombre):
+    empleado = Empleados.objects.get(nombre=empleado_nombre)
+    empleado.delete()
+
+    empleados = Empleados.objects.all()
+    context = {'empleados': empleados}
+
+    return render( request, 'AppHospital/leeremp.html', context )
+
+def editarEmpleado (request, empleado_nombre):
+    empleado = Empleados.objects.get(nombre=empleado_nombre)
+    if request.method =='POST':
+        form=Nuevo_empleado(request.POST)
+        print(form)
+        if form.is_valid:
+            info=form.cleaned_data
+            empleado.nombre = info['nombre']
+            empleado.edad = info['edad']
+            empleado.profesion = info['profesion']
+            empleado.especializacion = info['especializacion']
+            empleado.sueldo = info['sueldo']
+            empleado.email = info['email']
+            empleado.fecha_inicio= info['fecha_inicio']
+            empleado.save()
+            empleados=Empleados.objects.all()
+            return render (request,"AppHospital/leeremp.html",{'empleados':empleados})
+    else: 
+        form=Nuevo_empleado(initial={'nombre':empleado.nombre,
+        'edad':empleado.edad,'profesion':empleado.profesion,
+        'especializacion':empleado.especializacion,
+        'sueldo':empleado.sueldo, 'email': empleado.email,'fecha_inicio':empleado.fecha_inicio })  
+    return render(request, "AppHospital/editarEmpleado.html",
+    {'form':form,'empleado_nombre':empleado_nombre})
+
+def sobreMi (request):
+    return render (request, "AppHospital/sobreMi.html" )    
 
 def empleados (request):
     if request.method == "POST":

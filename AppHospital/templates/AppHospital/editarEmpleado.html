@@ -1,0 +1,23 @@
+{% extends "AppHospital/padre.html" %}
+
+ {% load static %}
+
+ {% block titulo_head %}
+    <title>Editar empleados</title>
+ {% endblock %}
+
+
+
+{% block main %}
+
+      <form 
+        action="{% url 'editarEmpleado' empleado_nombre %}"
+        method="POST" > {% csrf_token %}
+        <table>
+            {{form.as_table}}
+        </table>
+        <input type="submit" value="Guardar">
+      </form>
+
+
+ {% endblock %}
