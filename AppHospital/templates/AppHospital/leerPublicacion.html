@@ -1,0 +1,29 @@
+{% extends "AppHospital/padre.html" %}
+
+{% load static %}
+
+{% block titulo_head %}
+   <title>Publicaciones</title>
+{% endblock %}
+
+
+{% block main %}
+   <div class="d-grid gap-2">
+      <a  class="btn btn-primary" href="{% url 'publicaciones' %}" > Crear post</a>
+   </div>
+      {% for p in publicaciones %}
+      <div class="d-flex" style="align-items: center;width: 80%;margin-left:10%;padding-bottom: 20px; border-bottom: solid rgba(128, 128, 128, 0.548) 1px;">
+         <div class="card-body">
+            <h2 class="card-title">{{p.titulo}} </h2>
+            <h5 class="card-title">{{p.subtitulo}} </h5>
+            <p class="card-text">{{p.texto}} </p>
+            <div class="d-flex justify-content-center">
+               <p class="card-text mx-5"><i> Autor: {{p.autor}} </i></p>
+               <p class="card-text"><i> {{p.fecha}} </i></p>
+            </div>
+         </div>
+         <img src="/media/{{p.imagen}} " style="width: 50%;height: 400px; " class="card-img-top" alt="imagen de {{p.titulo}} ">
+      </div>
+      {% endfor %} 
+{% endblock %}
+

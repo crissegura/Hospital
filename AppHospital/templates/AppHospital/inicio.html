@@ -8,5 +8,20 @@
 
  
  {% block main %}
-    {{mensaje}}
+    
+   <div style="padding: 10px;display: flex; align-items:center;justify-content: center;flex-wrap: wrap;">
+      <div>
+         <h1 > Bienvenidos </h1>
+         <p> Este BLOG de salud surgió con el fin de <br>  
+            ayudarnos entre todos los miembros de esta <br>
+            comunidad. No importa si sos médico, enfermero <br> 
+            o radiólogo, a todos nos apasiona la salud <br> 
+            y para eso es este sitio. Aquí vas a poder ver <br>
+            publicaciones de colegas y hacer tus propios post. <br> 
+            Te invitamos a que te <a href="{% url 'register' %}">registres</a> y comiences esta nueva aventura. </p>
+      </div>
+      <img width="40%" src="https://static6.depositphotos.com/1001877/566/i/600/depositphotos_5664846-stock-photo-stethoscope-and-a-silhouette-of.jpg" alt="">
+      
+   </div>
+
  {% endblock %}

@@ -8,17 +8,17 @@
 
 
 {% block main %}
-   {% for e in empleados %}
-    <p>Empleado: {{e}} </p>
+   {% for p in publicaciones %}
+    <div>{{p}} </div>
 
-    <button>
+    <!--<button>
         <a href="{% url 'eliminarEmpleado' e.nombre %}">Eliminar</a>
     </button>
     <button>
         <a href="{% url 'editarEmpleado' e.nombre %}">Editar</a>
-    </button>
+    </button>-->
    {% endfor %} 
 
-    <a href="{% url 'empleados' %}">Nuevo empleado</a>
+    <!--<a href="{% url 'empleados' %}">Nuevo empleado</a> -->
 
 {% endblock %}
