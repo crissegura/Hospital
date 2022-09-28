@@ -9,7 +9,7 @@
  
  {% block main %}
     
-   <div style="padding: 10px;display: flex; align-items:center;justify-content: center;flex-wrap: wrap;">
+   <div style="min-height: 92vh;padding: 10px;display: flex; align-items:center;justify-content: center;flex-wrap: wrap;">
       <div>
          <h1 > Bienvenidos </h1>
          <p> Este BLOG de salud surgió con el fin de <br>  
@@ -21,7 +21,26 @@
             Te invitamos a que te <a href="{% url 'register' %}">registres</a> y comiences esta nueva aventura. </p>
       </div>
       <img width="40%" src="https://static6.depositphotos.com/1001877/566/i/600/depositphotos_5664846-stock-photo-stethoscope-and-a-silhouette-of.jpg" alt="">
-      
+   </div>
+
+   <div style=" min-height: 90vh;color: white ;padding: 10px;background-color: rgb(40, 37, 37); " >
+      <h2 style="padding-top: 30px;" >Nuestra comunidad</h2>
+      <div style="display: flex;justify-content: space-around;padding-top: 20px;">
+         <div class="card" style="width: 18rem;height: 23rem; color: black;">
+            <img src="/media/photos/inicio1.jfif" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Compartí tus conocimientos</h5>
+              <a href="{% url 'publicaciones' %}" class="btn btn-primary">Hacer post</a>
+            </div>
+         </div>
+         <div class="card" style="width: 18rem;color: black;height: 23rem;">
+            <img src="/media/photos/inicio2.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Formá parte de la comunidad</h5>
+              <a href="{% url 'register' %}" class="btn btn-primary">Registrate</a>
+            </div>
+         </div> 
+      </div>
    </div>
 
  {% endblock %}

@@ -10,6 +10,7 @@ urlpatterns = [
     path('editarPerfil', editarPerfil , name='editarPerfil'),
     path('', inicio, name='inicio'),
     path('sobreMi/', sobreMi ,name='sobreMi'),
+    path('agregarAvatar/',agregarAvatar  ,name='agregarAvatar'),
     path('publicaciones/', publicaciones  ,name='publicaciones'),
     path('leerPublicacion/', leerPublicaciones , name='leerPublicacion' ),
     path('eliminarPublicacion/<publicacion_publicacion>/', eliminarPublicacion , name='eliminarPublicacion' ),

@@ -79,25 +79,29 @@ def publicaciones (request):
         imagen=request.FILES['imagen']
         if nuevaPublicacion.is_valid():
             informacion=nuevaPublicacion.cleaned_data
+            user=request.user
             titulo=informacion.get("titulo")
             subtitulo=informacion.get("subtitulo")
             texto=informacion.get("texto")
-            autor=informacion.get("autor")
             imagen=informacion.get("imagen")
-            publicacion=Publicacion(titulo=titulo,subtitulo=subtitulo,
-            texto=texto,autor=autor,imagen=imagen,)
+            publicacion=Publicacion(titulo=titulo,subtitulo=subtitulo,autor=user,
+            texto=texto,imagen=imagen)
             publicacion.save()
-            return render(request, "AppHospital/inicio.html" )
+            return render(request, "AppHospital/inicio.html",{'usuario':request.user} )
         else:
             print(nuevaPublicacion.errors)
             return render(request, "AppHospital/inicio.html")
     else:
         nuevaPublicacion=FormPublicacion()
-        return render (request, "AppHospital/publicaciones.html",{'form':nuevaPublicacion} )
+        return render (request, "AppHospital/publicaciones.html",{'form':nuevaPublicacion, 'usuario':request.user ,'imagen':traerAvatar(request) } )
 
 def leerPublicaciones (request):
     publicaciones = Publicacion.objects.all()
-    return render (request, 'AppHospital/leerPublicacion.html', {'publicaciones': publicaciones,'imagen':traerAvatar(request)})
+    texto='No hay publicaciones para ver.'
+    if publicaciones:
+        return render (request, 'AppHospital/leerPublicacion.html', {'publicaciones': publicaciones,'imagen':traerAvatar(request)})
+    return render (request, 'AppHospital/leerPublicacion.html', {'texto':texto ,'imagen':traerAvatar(request)})
+
 
 @login_required
 def eliminarPublicacion (request, publicacion_publicacion):
@@ -119,25 +123,35 @@ def editarPublicacion (request, publicacion_publicacion):
             publicacion.titulo = info['titulo']
             publicacion.subtitulo = info['subtitulo']
             publicacion.texto = info['texto']
-            publicacion.autor = info['autor']
             if info['imagen']:
                 publicacion.imagen = info['imagen']
-            print(info['imagen'])
             publicacion.save()
             publicaciones=Publicacion.objects.all()
             return render (request,"AppHospital/leerPublicacion.html",{'publicaciones':publicaciones})
     else: 
         form=FormPublicacion(initial={'titulo': publicacion.titulo,
-        'subtitulo':publicacion.subtitulo,'texto':publicacion.texto,
-        'autor':publicacion.autor,'imagen':publicacion.imagen})  
+        'subtitulo':publicacion.subtitulo,'texto':publicacion.texto,'imagen':publicacion.imagen})  
     return render(request, "AppHospital/editarPublicacion.html",
     {'form':form,'publicacion_publicacion':publicacion_publicacion})
 
+@login_required
+def agregarAvatar(request):
+    if request.method=='POST':
+        formulario = AvatarForm(request.POST,request.FILES) 
+        if formulario.is_valid():
+            avatarViejo = Avatar.objects.get(user=request.user)
+            if (avatarViejo.imagen):
+                avatarViejo.delete()
+            avatar=Avatar(user=request.user, imagen=formulario.cleaned_data['imagen'])
+            avatar.save()
+            return render (request, 'AppHospital/inicio.html',{'usuario':request.user})
+    else:
+        formulario=AvatarForm()
+    return render (request, 'AppHospital/agregarAvatar.html',{'formulario':formulario,'usuario':request.user} )
 
 
 
 
-    
 
 
 

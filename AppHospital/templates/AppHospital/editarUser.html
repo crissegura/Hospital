@@ -14,7 +14,9 @@
     {% csrf_token %}
 
     {{form.as_p}}
-
+    <button class="btn-primary" style="border-radius: 20px;padding: 5px;">
+        <a style="color: white;text-decoration:none" href="{% url 'agregarAvatar' %}">Avatar</a>
+    </button>
     <button class="btn-primary" style="border-radius: 20px;padding: 5px;" type="submit" >
         Guardar cambios
     </button>

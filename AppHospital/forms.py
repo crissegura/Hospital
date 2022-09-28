@@ -33,6 +33,7 @@ class FormPublicacion(forms.Form):
     titulo=forms.CharField(max_length=100,required=False)
     subtitulo=forms.CharField(max_length=100,required=False)
     texto=forms.CharField(max_length=1000000000,required=False)
-    autor=forms.CharField(required=False)
     imagen=forms.ImageField(required=False)
 
+class AvatarForm(forms.Form):
+    imagen=forms.ImageField(label='Imagen')
