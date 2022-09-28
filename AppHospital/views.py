@@ -1,3 +1,5 @@
+from email.mime import image
+from operator import le
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
@@ -16,7 +18,7 @@ def login_request(request):
             usuario = authenticate(username=user,password=password)
             if usuario is not None:
                 login(request, usuario)
-                return render (request, 'AppHospital/inicio.html', {'mensaje':f'Bienvenido {user}. '} )
+                return render (request, 'AppHospital/inicio.html')
             else:
                 return render(request, 'AppHospital/login.html', {'mensaje':f'No se pudo iniciar sesión. Datos incorrectos.','form':form} )
         else:
@@ -33,7 +35,7 @@ def register(request):
             return render (request, 'AppHospital/inicio.html', {'mensaje':'Usuario creado exitosamente!'} )
     else:
         form = UserRegisterForm()
-    return  render(request, 'AppHospital/registro.html', {'form':form} )
+    return  render(request, 'AppHospital/registro.html', {'form':form, 'imagen':traerAvatar(request) } )
 
 @login_required
 def editarPerfil(request):
@@ -51,14 +53,23 @@ def editarPerfil(request):
             return render (request, 'AppHospital/inicio.html', {'mensaje':f'Usuario editado'})
     else:
         form=UserEditForm(request.POST)
-    return render (request, 'AppHospital/editarUser.html', {'form':form,'usuario':usuario})
+    return render (request, 'AppHospital/editarUser.html', {'form':form,'usuario':usuario, 'imagen':traerAvatar(request) })
+
+@login_required
+def traerAvatar(request):
+    lista=Avatar.objects.filter(user=request.user)
+    if len(lista)!=0:
+        imagen=lista[0].imagen.url
+    else:
+        imagen=''
+    return imagen
 
 
 def inicio (request):
-    return render (request,"AppHospital/inicio.html")
+    return render (request,"AppHospital/inicio.html",{'imagen':traerAvatar(request)})
 
 def sobreMi (request):
-    return render (request, "AppHospital/sobreMi.html" )
+    return render (request, "AppHospital/sobreMi.html",{'imagen':traerAvatar(request)} )
 
 @login_required
 def publicaciones (request):
@@ -86,147 +97,44 @@ def publicaciones (request):
 
 def leerPublicaciones (request):
     publicaciones = Publicacion.objects.all()
+    return render (request, 'AppHospital/leerPublicacion.html', {'publicaciones': publicaciones,'imagen':traerAvatar(request)})
+
+@login_required
+def eliminarPublicacion (request, publicacion_publicacion):
+    publicacion = Publicacion.objects.get(titulo=publicacion_publicacion)
+    publicacion.delete()
+
+    publicaciones = Publicacion.objects.all()
     context = {'publicaciones': publicaciones}
-    return render (request, 'AppHospital/leerPublicacion.html', context)
+
+    return render( request, 'AppHospital/leerPublicacion.html', context )
+
+@login_required
+def editarPublicacion (request, publicacion_publicacion):
+    publicacion = Publicacion.objects.get(titulo=publicacion_publicacion)
+    if request.method =='POST':
+        form=FormPublicacion(request.POST,request.FILES)
+        if form.is_valid():
+            info=form.cleaned_data
+            publicacion.titulo = info['titulo']
+            publicacion.subtitulo = info['subtitulo']
+            publicacion.texto = info['texto']
+            publicacion.autor = info['autor']
+            if info['imagen']:
+                publicacion.imagen = info['imagen']
+            print(info['imagen'])
+            publicacion.save()
+            publicaciones=Publicacion.objects.all()
+            return render (request,"AppHospital/leerPublicacion.html",{'publicaciones':publicaciones})
+    else: 
+        form=FormPublicacion(initial={'titulo': publicacion.titulo,
+        'subtitulo':publicacion.subtitulo,'texto':publicacion.texto,
+        'autor':publicacion.autor,'imagen':publicacion.imagen})  
+    return render(request, "AppHospital/editarPublicacion.html",
+    {'form':form,'publicacion_publicacion':publicacion_publicacion})
 
 
 
-# @login_required
-# def leerEmpleados (request):
-#     empleados = Empleados.objects.all()
-#     context = {'empleados': empleados}
-#     return render (request, 'AppHospital/leeremp.html', context)
-
-# def eliminarEmpleado (request, empleado_nombre):
-#     empleado = Empleados.objects.get(nombre=empleado_nombre)
-#     empleado.delete()
-
-#     empleados = Empleados.objects.all()
-#     context = {'empleados': empleados}
-
-#     return render( request, 'AppHospital/leeremp.html', context )
-
-# def editarEmpleado (request, empleado_nombre):
-#     empleado = Empleados.objects.get(nombre=empleado_nombre)
-#     if request.method =='POST':
-#         form=Nuevo_empleado(request.POST)
-#         print(form)
-#         if form.is_valid:
-#             info=form.cleaned_data
-#             empleado.nombre = info['nombre']
-#             empleado.edad = info['edad']
-#             empleado.profesion = info['profesion']
-#             empleado.especializacion = info['especializacion']
-#             empleado.sueldo = info['sueldo']
-#             empleado.email = info['email']
-#             empleado.fecha_inicio= info['fecha_inicio']
-#             empleado.save()
-#             empleados=Empleados.objects.all()
-#             return render (request,"AppHospital/leeremp.html",{'empleados':empleados})
-#     else: 
-#         form=Nuevo_empleado(initial={'nombre':empleado.nombre,
-#         'edad':empleado.edad,'profesion':empleado.profesion,
-#         'especializacion':empleado.especializacion,
-#         'sueldo':empleado.sueldo, 'email': empleado.email,'fecha_inicio':empleado.fecha_inicio })  
-#     return render(request, "AppHospital/editarEmpleado.html",
-#     {'form':form,'empleado_nombre':empleado_nombre})    
-
-# def empleados (request):
-#     if request.method == "POST":
-#         nuevoEmpleado=Nuevo_empleado(request.POST)
-#         print(nuevoEmpleado)
-#         if nuevoEmpleado.is_valid():
-#             informacion=nuevoEmpleado.cleaned_data
-#             nombre=informacion.get("nombre")
-#             edad=informacion.get("edad")
-#             profesion=informacion.get("profesion")
-#             especializacion=informacion.get("especializacion")
-#             sueldo=informacion.get("sueldo")
-#             email=informacion.get("email")
-#             fecha_inicio=informacion.get("fecha_inicio")
-#             empleado=Empleados(nombre=nombre,edad=edad,profesion=profesion,especializacion=especializacion,
-#             sueldo=sueldo,email=email,fecha_inicio=fecha_inicio)
-#             empleado.save()
-#             return render(request, "AppHospital/inicio.html" )
-#         else:
-#             return render(request, "AppHospital/inicio.html")
-#     else:
-#         nuevoEmpleado=Nuevo_empleado()
-#         return render (request, "AppHospital/empleados.html", {"formulario":nuevoEmpleado})
-
-# def servicios (request):
-#     if request.method == "POST":
-#         nuevoServicio=Nuevo_servicio(request.POST)
-#         if nuevoServicio.is_valid():
-#             informacion=nuevoServicio.cleaned_data
-#             getServicio=informacion.get("servicio")
-#             getPrecio=informacion.get("precio")
-#             servicioAgregado=Servicios(servicio=getServicio,precio=getPrecio)
-#             servicioAgregado.save()
-#             return render(request, "AppHospital/inicio.html" )
-#         else:
-#             return render(request, "AppHospital/inicio.html")
-#     else:
-#         nuevoServicio=Nuevo_servicio()
-#         return render (request, "AppHospital/servicios.html", {"formulario":nuevoServicio})
-   
-
-    
-# def pacientes(request):
-#     if request.method == "POST":
-#         nuevoPaciente=Nuevo_paciente(request.POST)
-#         print(nuevoPaciente)
-#         if nuevoPaciente.is_valid():
-#             informacion=nuevoPaciente.cleaned_data
-#             nombre=informacion.get("nombre")
-#             edad=informacion.get("edad")
-#             situacion=informacion.get("situacion")
-#             ultima_visita=informacion.get("ultima_visita")
-#             fecha_regreso=informacion.get("fecha_regreso")
-#             email=informacion.get("email")
-#             paciente=Pacientes(nombre=nombre,edad=edad,situacion=situacion,
-#             ultima_visita=ultima_visita,fecha_regreso=fecha_regreso,email=email)
-#             paciente.save()
-#             return render(request, "AppHospital/inicio.html")
-#         else:
-#             return render(request, "AppHospital/inicio.html")
-#     else:
-#         nuevoPaciente=Nuevo_paciente()
-#         return render (request, "AppHospital/pacientes.html", {"formulario":nuevoPaciente})
-    
-    
-# def buscarPaciente(request):
-#     return render(request, "AppHospital/pacientes.html")
-
-# def buscar(request):
-#     nombre=request.GET['nombre']
-#     paciente=Pacientes.objects.filter(nombre=nombre)
-#     if len(paciente)!=0:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"paciente":paciente, "nombre":nombre} )
-#     else:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'Paciente no registrado'} )
-    
-# def buscarEmpleado(request):
-#     return render (request, "AppHospital/empleados.html")
-
-# def buscarEmp(request):
-#     nombre=request.GET['nombre']
-#     empleados=Empleados.objects.filter(nombre=nombre)
-#     if len(empleados)!=0:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"empleados":empleados, "nombre":nombre} )
-#     else:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'Esta persona no trabaja aquí.'} )
-
-# def buscarServicio(request):
-#     return render (request, "AppHospital/servicios.html")
-
-# def buscarServ(request):
-#     servicio=request.GET['nombre']
-#     miServicio=Servicios.objects.filter(servicio=servicio)
-#     if len(miServicio)!=0:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"miServicio":miServicio, "servicio":servicio} )
-#     else:
-#         return render(request, "AppHospital/resultadosBusquedas.html", {"mensaje":'No realizamos este servicio en el Hospital.'} )
 
 
     

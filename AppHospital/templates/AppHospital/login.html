@@ -11,7 +11,7 @@
     
     {{mensaje}}
         
-    <form action="" method="POST">
+    <form method="POST">
         {% csrf_token %}
         
             <h1 style="padding: 20px;width:40%; margin-left:30%;border-bottom:solid 1px rgba(0, 0, 0, 0.374);" >Inicia sesión</h1>
@@ -21,10 +21,15 @@
             <button type="submit" class="btn-primary" style="border-radius: 20px;padding: 5px;" >
                 Iniciar sesión
             </button>
-        
-        
-
     </form>
+    
+    <div class="d-flex justify-content-center align-items-baseline my-4">
+        <h5 style="font-size: 18px;">Todavía no tenés cuenta?</h5>
+        <button style="border:none;background-color: transparent;">
+            <a style="font-size: 18px; text-decoration:none" href="{% url 'register' %}">Creá tu cuenta</a>
+        </button>
+    </div>
+    
 
 
 {% endblock %}
