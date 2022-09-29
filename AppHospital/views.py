@@ -165,9 +165,6 @@ def agregarAvatar(request):
     if request.method=='POST':
         formulario = AvatarForm(request.POST,request.FILES) 
         if formulario.is_valid():
-            avatarViejo = Avatar.objects.get(user=request.user)
-            if (avatarViejo.imagen):
-                avatarViejo.delete()
             avatar=Avatar(user=request.user, imagen=formulario.cleaned_data['imagen'])
             avatar.save()
             return render (request, 'AppHospital/inicio.html',{'usuario':request.user})
