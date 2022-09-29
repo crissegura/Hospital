@@ -23,7 +23,7 @@
       <img width="40%" src="https://static6.depositphotos.com/1001877/566/i/600/depositphotos_5664846-stock-photo-stethoscope-and-a-silhouette-of.jpg" alt="">
    </div>
 
-   <div style=" min-height: 90vh;color: white ;padding: 10px;background-color: rgb(40, 37, 37); " >
+   <div style=" min-height: 100vh;color: white ;padding: 10px;background-color: rgb(40, 37, 37); " >
       <h2 style="padding-top: 30px;" >Nuestra comunidad</h2>
       <div style="display: flex;justify-content: space-around;padding-top: 20px;">
          <div class="card" style="width: 18rem;height: 23rem; color: black;">
@@ -40,7 +40,34 @@
               <a href="{% url 'register' %}" class="btn btn-primary">Registrate</a>
             </div>
          </div> 
+         <div class="card" style="width: 18rem;color: black;height: 23rem;">
+            <img src="/media/photos/inicio2.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Animate a dejarnos tu comentario</h5>
+              <a href="{% url 'comentarios' %}" class="btn btn-primary">Comentarios</a>
+            </div>
+         </div> 
       </div>
    </div>
+
+   <div style=" min-height: 100vh;color: black ;padding: 10px;background-color:white " >
+      <h2 style="padding-top: 30px;" >Comentarios</h2>
+      <h3 style="margin-top:50px ;"> {{texto}} </h3>
+      <div style="display: flex; justify-content:space-evenly;flex-wrap: wrap;">
+         {% for c in comentarios %}
+         <div class="card" style="width: 18rem;" >
+            <div class="card-body">
+               <h6 class="card-title" style="text-align: left;"> Comentario de: {{c.comentarista}} </h6>
+               <p style="text-align: left;" class="card-title">{{c.comentario}} </p>
+               <p style="text-align: left;" class="card-text">{{c.date}} </p>
+            </div>
+         </div>
+         
+      {% endfor %}    
+      </div>
+      
+      
+   </div>
+   
 
  {% endblock %}

@@ -37,3 +37,6 @@ class FormPublicacion(forms.Form):
 
 class AvatarForm(forms.Form):
     imagen=forms.ImageField(label='Imagen')
+
+class FormCom(forms.Form):
+    comentario=forms.CharField(label='Comentario',max_length=300)

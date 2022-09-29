@@ -4,5 +4,6 @@ from .models import *
 
 admin.site.register(Publicacion)
 admin.site.register(Avatar)
+admin.site.register(Comentario)
 
 

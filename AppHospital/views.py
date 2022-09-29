@@ -38,6 +38,23 @@ def register(request):
     return  render(request, 'AppHospital/registro.html', {'form':form, 'imagen':traerAvatar(request) } )
 
 @login_required
+def comentarios(request):
+    if request.method=='POST':
+        formulario=FormCom(request.POST)
+        if formulario.is_valid():
+            info=formulario.cleaned_data
+            comentario=info.get("comentario")
+            user=request.user
+            ncomentario=Comentario(comentario=comentario,comentarista=user)
+            ncomentario.save()
+            return render (request, 'AppHospital/comentarios.html',{'usuario':request.user})
+    else:
+        formulario=FormCom()
+    return  render(request, 'AppHospital/comentarios.html', {'formulario':formulario, 'imagen':traerAvatar(request) } )
+    
+
+
+@login_required
 def editarPerfil(request):
     usuario = request.user
     if request.method=='POST':
@@ -66,7 +83,8 @@ def traerAvatar(request):
 
 
 def inicio (request):
-    return render (request,"AppHospital/inicio.html",{'imagen':traerAvatar(request)})
+    comentarios = Comentario.objects.all()
+    return render (request,"AppHospital/inicio.html",{'imagen':traerAvatar(request),'comentarios': comentarios})
 
 def sobreMi (request):
     return render (request, "AppHospital/sobreMi.html",{'imagen':traerAvatar(request)} )
@@ -101,6 +119,14 @@ def leerPublicaciones (request):
     if publicaciones:
         return render (request, 'AppHospital/leerPublicacion.html', {'publicaciones': publicaciones,'imagen':traerAvatar(request)})
     return render (request, 'AppHospital/leerPublicacion.html', {'texto':texto ,'imagen':traerAvatar(request)})
+
+
+def leerComentarios (request):
+    comentarios = Comentario.objects.all()
+    texto='No hay comentarios aún.'
+    if comentarios:
+        return render (request, 'AppHospital/inicio.html', {'comentarios': comentarios})
+    return render (request, 'AppHospital/inicio.html', {'texto':texto ,'imagen':traerAvatar(request)})
 
 
 @login_required
